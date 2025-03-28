@@ -1,0 +1,350 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.3 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 2, in <module>
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1965, in __getattr__
+    value = getattr(module, name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/modeling_auto.py", line 22, in <module>
+    from .auto_factory import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 40, in <module>
+    from ...generation import GenerationMixin
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 30, in <module>
+    from transformers.generation.candidate_generator import AssistantVocabTranslatorCache
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/candidate_generator.py", line 27, in <module>
+    from sklearn.metrics import roc_curve
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.3 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 2, in <module>
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1965, in __getattr__
+    value = getattr(module, name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/modeling_auto.py", line 22, in <module>
+    from .auto_factory import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 40, in <module>
+    from ...generation import GenerationMixin
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 30, in <module>
+    from transformers.generation.candidate_generator import AssistantVocabTranslatorCache
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/candidate_generator.py", line 27, in <module>
+    from sklearn.metrics import roc_curve
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 64, in <module>
+    from pandas.core.arrays.masked import BaseMaskedArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/masked.py", line 60, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/nanops.py", line 52, in <module>
+    bn = import_optional_dependency("bottleneck", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/bottleneck/__init__.py", line 2, in <module>
+    from .reduce import (
+AttributeError: _ARRAY_API not found
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.3 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 5, in <module>
+    from reshape_movies import get_dictionary_of_movies
+  File "/home/users/sv226/everything/caramba/reshape_movies.py", line 2, in <module>
+    from convokit import Corpus, download
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/convokit/__init__.py", line 7, in <module>
+    from .politenessStrategies import *
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/convokit/politenessStrategies/__init__.py", line 1, in <module>
+    from .politenessStrategies import *
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/convokit/politenessStrategies/politenessStrategies.py", line 3, in <module>
+    import matplotlib.pyplot as plt
+  File "/usr/lib/python3/dist-packages/matplotlib/__init__.py", line 109, in <module>
+    from . import _api, _version, cbook, docstring, rcsetup
+  File "/usr/lib/python3/dist-packages/matplotlib/rcsetup.py", line 27, in <module>
+    from matplotlib.colors import Colormap, is_color_like
+  File "/usr/lib/python3/dist-packages/matplotlib/colors.py", line 56, in <module>
+    from matplotlib import _api, cbook, scale
+  File "/usr/lib/python3/dist-packages/matplotlib/scale.py", line 23, in <module>
+    from matplotlib.ticker import (
+  File "/usr/lib/python3/dist-packages/matplotlib/ticker.py", line 136, in <module>
+    from matplotlib import transforms as mtransforms
+  File "/usr/lib/python3/dist-packages/matplotlib/transforms.py", line 46, in <module>
+    from matplotlib._path import (
+AttributeError: _ARRAY_API not found
+/home/users/sv226/.local/lib/python3.10/site-packages/convokit/__init__.py:26: UserWarning: If you are using ConvoKit with Google Colab, incorrect versions of some packages (ex. scipy) may be imported while runtime start. To fix the issue, restart the session and run all codes again. Thank you!
+  warnings.warn(
+2025-03-27 16:09:16.339990: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-03-27 16:09:16.352562: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743106156.369314    8445 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743106156.374437    8445 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1743106156.388525    8445 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743106156.388553    8445 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743106156.388558    8445 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743106156.388563    8445 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-03-27 16:09:16.392404: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.3 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 81, in <module>
+    main()
+  File "/home/users/sv226/everything/caramba/inference.py", line 63, in main
+    model, tokenizer = load_model_and_tokenizer("gpt2")
+  File "/home/users/sv226/everything/caramba/inference.py", line 11, in load_model_and_tokenizer
+    model = AutoModelForCausalLM.from_pretrained(
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 572, in from_pretrained
+    model_class = _get_model_class(config, cls._model_mapping)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 388, in _get_model_class
+    supported_models = model_mapping[type(config)]
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 772, in __getitem__
+    return self._load_attr_from_module(model_type, model_name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 786, in _load_attr_from_module
+    return getattribute_from_module(self._modules[module_name], attr)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 702, in getattribute_from_module
+    if hasattr(module, attr):
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 39, in <module>
+    from ...modeling_utils import ALL_ATTENTION_FUNCTIONS, PreTrainedModel, SequenceSummary
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/modeling_utils.py", line 61, in <module>
+    from .loss.loss_utils import LOSS_MAPPING
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/loss/loss_utils.py", line 19, in <module>
+    from .loss_deformable_detr import DeformableDetrForObjectDetectionLoss, DeformableDetrForSegmentationLoss
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/loss/loss_deformable_detr.py", line 4, in <module>
+    from ..image_transforms import center_to_corners_format
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/image_transforms.py", line 48, in <module>
+    import tensorflow as tf
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/tensorflow/__init__.py", line 468, in <module>
+    importlib.import_module("keras.src.optimizers")
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/__init__.py", line 2, in <module>
+    from keras.api import DTypePolicy
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/api/__init__.py", line 8, in <module>
+    from keras.api import activations
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/api/activations/__init__.py", line 7, in <module>
+    from keras.src.activations import deserialize
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/src/__init__.py", line 13, in <module>
+    from keras.src import visualization
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/src/visualization/__init__.py", line 2, in <module>
+    from keras.src.visualization import plot_image_gallery
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/src/visualization/plot_image_gallery.py", line 13, in <module>
+    import matplotlib.pyplot as plt
+  File "/usr/lib/python3/dist-packages/matplotlib/__init__.py", line 109, in <module>
+    from . import _api, _version, cbook, docstring, rcsetup
+  File "/usr/lib/python3/dist-packages/matplotlib/rcsetup.py", line 27, in <module>
+    from matplotlib.colors import Colormap, is_color_like
+  File "/usr/lib/python3/dist-packages/matplotlib/colors.py", line 56, in <module>
+    from matplotlib import _api, cbook, scale
+  File "/usr/lib/python3/dist-packages/matplotlib/scale.py", line 23, in <module>
+    from matplotlib.ticker import (
+  File "/usr/lib/python3/dist-packages/matplotlib/ticker.py", line 136, in <module>
+    from matplotlib import transforms as mtransforms
+  File "/usr/lib/python3/dist-packages/matplotlib/transforms.py", line 46, in <module>
+    from matplotlib._path import (
+AttributeError: _ARRAY_API not found
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.1.3 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 81, in <module>
+    main()
+  File "/home/users/sv226/everything/caramba/inference.py", line 63, in main
+    model, tokenizer = load_model_and_tokenizer("gpt2")
+  File "/home/users/sv226/everything/caramba/inference.py", line 11, in load_model_and_tokenizer
+    model = AutoModelForCausalLM.from_pretrained(
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 572, in from_pretrained
+    model_class = _get_model_class(config, cls._model_mapping)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 388, in _get_model_class
+    supported_models = model_mapping[type(config)]
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 772, in __getitem__
+    return self._load_attr_from_module(model_type, model_name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 786, in _load_attr_from_module
+    return getattribute_from_module(self._modules[module_name], attr)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 702, in getattribute_from_module
+    if hasattr(module, attr):
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 39, in <module>
+    from ...modeling_utils import ALL_ATTENTION_FUNCTIONS, PreTrainedModel, SequenceSummary
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/modeling_utils.py", line 61, in <module>
+    from .loss.loss_utils import LOSS_MAPPING
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/loss/loss_utils.py", line 19, in <module>
+    from .loss_deformable_detr import DeformableDetrForObjectDetectionLoss, DeformableDetrForSegmentationLoss
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/loss/loss_deformable_detr.py", line 4, in <module>
+    from ..image_transforms import center_to_corners_format
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/image_transforms.py", line 48, in <module>
+    import tensorflow as tf
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/tensorflow/__init__.py", line 468, in <module>
+    importlib.import_module("keras.src.optimizers")
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/__init__.py", line 2, in <module>
+    from keras.api import DTypePolicy
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/api/__init__.py", line 34, in <module>
+    from keras.api import visualization
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/api/visualization/__init__.py", line 11, in <module>
+    from keras.src.visualization.plot_bounding_box_gallery import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/keras/src/visualization/plot_bounding_box_gallery.py", line 12, in <module>
+    from matplotlib import patches  # For legend patches
+  File "/usr/lib/python3/dist-packages/matplotlib/__init__.py", line 109, in <module>
+    from . import _api, _version, cbook, docstring, rcsetup
+  File "/usr/lib/python3/dist-packages/matplotlib/rcsetup.py", line 27, in <module>
+    from matplotlib.colors import Colormap, is_color_like
+  File "/usr/lib/python3/dist-packages/matplotlib/colors.py", line 56, in <module>
+    from matplotlib import _api, cbook, scale
+  File "/usr/lib/python3/dist-packages/matplotlib/scale.py", line 23, in <module>
+    from matplotlib.ticker import (
+  File "/usr/lib/python3/dist-packages/matplotlib/ticker.py", line 136, in <module>
+    from matplotlib import transforms as mtransforms
+  File "/usr/lib/python3/dist-packages/matplotlib/transforms.py", line 46, in <module>
+    from matplotlib._path import (
+AttributeError: _ARRAY_API not found
+An error occurred: numpy.core.multiarray failed to import
+Loading model and tokenizer from gpt2...
+Loading movie dataset...
+Downloading movie-corpus to /home/users/sv226/.convokit/saved-corpora/movie-corpus
+Downloading movie-corpus from http://zissou.infosci.cornell.edu/convokit/datasets/movie-corpus/movie-corpus.zip (40.9MB)... Done
+Performing inference...
+Traceback (most recent call last):
+  File "/home/users/sv226/everything/caramba/inference.py", line 81, in <module>
+    main() 
+  File "/home/users/sv226/everything/caramba/inference.py", line 72, in main
+    outputs = perform_inference(model, tokenizer, dataset)
+  File "/home/users/sv226/everything/caramba/inference.py", line 44, in perform_inference
+    outputs = model.generate(
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 2182, in generate
+    self._validate_generated_length(generation_config, input_ids_length, has_default_max_length)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 1468, in _validate_generated_length
+    raise ValueError(
+ValueError: Input length of input_ids is 512, but `max_length` is set to 512. This can lead to unexpected behavior. You should consider increasing `max_length` or, better yet, setting `max_new_tokens`.

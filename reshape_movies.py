@@ -10,10 +10,11 @@ def get_convo_id(utterance):
 def get_corpus_df():
     corpus = Corpus(filename=download("movie-corpus"))
     df = corpus.get_conversations_dataframe()
-    return df
+    return corpus, df
 
 def get_dictionary_of_movies(N_MOVIES_TO_USE=300):
     corpus, df = get_corpus_df()
+    utterance_ids = corpus.utterances.keys()
 
     all_movies = {"speaker_ids":[],"text":[]}
     for i in range(N_MOVIES_TO_USE):
