@@ -75,92 +75,13 @@ Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/e
 AttributeError: _ARRAY_API not found
 /home/users/sv226/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
   warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
-2025-04-08 17:29:38.619945: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-04-08 18:45:14.543312: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1744147778.638996  707819 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1744147778.644865  707819 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1744147778.661180  707819 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1744147778.661203  707819 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1744147778.661209  707819 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1744147778.661214  707819 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2025-04-08 17:29:38.665872: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1744152314.561996  708781 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1744152314.567797  708781 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1744152314.584492  708781 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152314.584519  708781 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152314.584525  708781 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152314.584530  708781 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-08 18:45:14.589240: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-Loading models...
-Loading evaluation dataset...
-Created 2060 total data points from 5 movies
-Loading GPT-2 model for direct perplexity evaluation...
-Computing logits and calculating perplexity...
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Input ids:  torch.Size([2, 512])
-Traceback (most recent call last):
-  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 205, in <module>
-    main()
-  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 200, in main
-    gpt2_perplexity = evaluate_gpt2_perplexity(gpt2_model, gpt2_tokenizer, dataset)
-  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 120, in evaluate_gpt2_perplexity
-    outputs = model(input_ids, attention_mask=attention_mask)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 1084, in forward
-    lm_logits = self.lm_head(hidden_states)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 117, in forward
-    return F.linear(input, self.weight, self.bias)
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 198.00 MiB. GPU 0 has a total capacity of 11.90 GiB of which 116.62 MiB is free. Including non-PyTorch memory, this process has 11.79 GiB memory in use. Of the allocated memory 11.28 GiB is allocated by PyTorch, and 221.64 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

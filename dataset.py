@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import Dataset
+import random
 
 
 class TokenizedMovieDataset(Dataset):
@@ -193,11 +194,96 @@ class TokenizedMovieDataset(Dataset):
         Main entry point for PyTorch DataLoader.
         
         Args:
-            idx (int): Global index in the dataset
+            idx (int or slice): Index or slice of items to retrieve
             
         Returns:
-            dict: Data point containing input_ids, label, speaker_mask, and attention_mask
+            dict or list: Data point(s) containing input_ids, label, speaker_mask, and attention_mask
         """
+        # Handle slicing
+        if isinstance(idx, slice):
+            # Create a new dataset with the sliced indices
+            sliced_dataset = TokenizedMovieDataset.__new__(TokenizedMovieDataset)
+            sliced_dataset.tokenizer = self.tokenizer
+            sliced_dataset.data = self.data
+            sliced_dataset.padding = self.padding
+            sliced_dataset.max_length = self.max_length
+            sliced_dataset.min_length = self.min_length
+            sliced_dataset.speaker_to_id = self.speaker_to_id
+            sliced_dataset.id_to_speaker = self.id_to_speaker
+            
+            # Slice the index_mapping
+            sliced_dataset.index_mapping = self.index_mapping[idx]
+            
+            return sliced_dataset
+        
         # Get the movie index and position from the mapping
         movie_idx, position = self.index_mapping[idx]
         return self.getitem_doc_with_position(movie_idx, position)
+
+
+class RandomSubsetDataset(Dataset):
+    """
+    A dataset wrapper that returns a random subset of another dataset.
+    
+    This class is useful for testing and evaluation purposes, allowing you to
+    quickly get a random subset of a larger dataset without modifying the original.
+    
+    Attributes:
+        dataset: The original dataset to sample from
+        indices: The indices of the items to include in the subset
+    """
+    
+    def __init__(self, dataset, size=None, fraction=None, seed=None):
+        """
+        Initialize the random subset dataset.
+        
+        Args:
+            dataset: The original dataset to sample from
+            size (int, optional): The number of items to include in the subset.
+                                If None, fraction is used instead.
+            fraction (float, optional): The fraction of the dataset to include.
+                                      Used only if size is None.
+            seed (int, optional): Random seed for reproducibility.
+        """
+        if seed is not None:
+            random.seed(seed)
+            
+        if size is not None:
+            self.size = min(size, len(dataset))
+        elif fraction is not None:
+            self.size = int(len(dataset) * fraction)
+        else:
+            raise ValueError("Either size or fraction must be provided")
+            
+        self.dataset = dataset
+        self.indices = random.sample(range(len(dataset)), self.size)
+        
+    def __len__(self):
+        """
+        Return the number of items in the subset.
+        
+        Returns:
+            int: The number of items in the subset
+        """
+        return self.size
+        
+    def __getitem__(self, idx):
+        """
+        Get an item from the subset.
+        
+        Args:
+            idx (int): Index of the item to retrieve
+            
+        Returns:
+            The item from the original dataset at the randomly selected index
+        """
+        return self.dataset[self.indices[idx]]
+        
+    def get_indices(self):
+        """
+        Get the indices of the items in the subset.
+        
+        Returns:
+            list: The indices of the items in the subset
+        """
+        return self.indices

@@ -2,7 +2,7 @@ import torch
 import sys
 import numpy as np
 from transformers import AutoModel, AutoTokenizer, AutoModelForCausalLM
-from dataset import TokenizedMovieDataset
+from dataset import TokenizedMovieDataset, RandomSubsetDataset
 from reshape_movies import get_dictionary_of_movies
 from inference import obtain_double_hidden_states_and_labels, load_embedding_model_and_tokenizer
 from train_predictor import TokenPredictor
@@ -75,7 +75,7 @@ def evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels, batc
     
     return perplexity
 
-def evaluate_gpt2_perplexity(model, tokenizer, dataset, batch_size=2):
+def evaluate_gpt2_perplexity(model, tokenizer, dataset, batch_size=1):
     """
     Evaluate perplexity on the dataset using a GPT-2 model.
     
@@ -89,19 +89,28 @@ def evaluate_gpt2_perplexity(model, tokenizer, dataset, batch_size=2):
         model: The GPT-2 model
         tokenizer: The tokenizer for encoding/decoding text
         dataset: The dataset to evaluate on
-        batch_size (int, optional): Batch size for processing. Defaults to 4.
+        batch_size (int, optional): Batch size for processing. Defaults to 1.
         
     Returns:
         float: The calculated perplexity
     """
     from torch.utils.data import DataLoader
     
+    # Create a random subset of the dataset for evaluation
+    # This helps reduce memory usage and computation time
+    subset_size = min(100, len(dataset))  # Use at most 100 items or the full dataset if smaller
+    subset_dataset = RandomSubsetDataset(dataset, size=subset_size, seed=42)  # Fixed seed for reproducibility
+    
     # Create a dataloader for the dataset
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    dataloader = DataLoader(subset_dataset, batch_size=batch_size, shuffle=False)
     
     # Move model to the appropriate device
     device = next(model.parameters()).device
     model.eval()
+    
+    # Enable gradient checkpointing to save memory
+    if hasattr(model, "gradient_checkpointing_enable"):
+        model.gradient_checkpointing_enable()
     
     all_logits = []
     all_labels = []
@@ -114,7 +123,7 @@ def evaluate_gpt2_perplexity(model, tokenizer, dataset, batch_size=2):
             attention_mask = batch['attention_mask'].to(device)
             labels = batch['label'].to(device)
             
-            print("Input ids: ",input_ids.shape)
+            #print("Input ids: ",input_ids.shape)
             
             # Get model outputs
             outputs = model(input_ids, attention_mask=attention_mask)
@@ -163,12 +172,15 @@ def main():
     print("Loading models...")
     model, tokenizer = load_embedding_model_and_tokenizer(model_name)
     
-    # Load evaluation dataset (last 1000 movies)
+    # Load evaluation dataset
     print("Loading evaluation dataset...")
     all_movies = get_dictionary_of_movies(N_MOVIES_TO_USE=end_movie_id - start_movie_id, start_movie_id=start_movie_id)
     dataset = TokenizedMovieDataset(all_movies, tokenizer, padding=True, max_length=300, min_length=200)
     del all_movies
-    '''
+    # Take a random subset of 10 samples from the dataset
+    indices = torch.randperm(len(dataset))[:10]
+    dataset = torch.utils.data.Subset(dataset, indices)
+    
     # Load predictor (make sure to load state dict correctly)
     print("Loading predictor...")
     predictor = TokenPredictor(input_dim=1536, vocab_size=tokenizer.vocab_size).to('cuda')  # 1536 = 2 * 768 (GPT-2 hidden size).t
@@ -186,7 +198,7 @@ def main():
     perplexity = evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels)
     
     print(f"Perplexity on held-out data, using token predictor (GD): {perplexity:.4f}")
-    '''
+    
     
     # Evaluate perplexity using basic model
     print("Loading GPT-2 model for direct perplexity evaluation...")
