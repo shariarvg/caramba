@@ -3,25 +3,45 @@ from torch.utils.data import Dataset
 
 
 class TokenizedMovieDataset(Dataset):
-    def __init__(self, all_movies, tokenizer, padding=False, max_length=512):
+    """
+    A PyTorch Dataset class for processing movie dialogue data.
+    
+    This class tokenizes movie dialogue, maps speaker IDs to sequential integers,
+    and creates data points for each position in each movie. It returns input tokens,
+    labels, speaker masks, and attention masks for model training and evaluation.
+    
+    Attributes:
+        tokenizer: The tokenizer used to process text
+        data: List of dictionaries containing tokenized movie data
+        padding: Whether to pad sequences
+        max_length: Maximum sequence length
+        min_length: Minimum sequence length for a movie to be included
+        speaker_to_id: Mapping from speaker names to sequential IDs
+        id_to_speaker: Mapping from sequential IDs to speaker names
+        index_mapping: List of (movie_idx, position) pairs for data points
+    """
+    
+    def __init__(self, all_movies, tokenizer, padding=False, max_length=512, min_length=100):
+        """
+        Initialize the dataset with tokenized movie data.
+        
+        Args:
+            all_movies (dict): Dictionary containing movie text and speaker IDs
+            tokenizer: The tokenizer to use for processing text
+            padding (bool, optional): Whether to pad sequences. Defaults to False.
+            max_length (int, optional): Maximum sequence length. Defaults to 512.
+            min_length (int, optional): Minimum sequence length for a movie. Defaults to 100.
+        """
         self.tokenizer = tokenizer
         self.data = []
         self.padding = padding
         self.max_length = max_length
+        self.min_length = min_length
         
         # Create a mapping of unique speaker IDs to integers
         self.speaker_to_id = {}
         self.id_to_speaker = {}
         current_id = 0
-        
-        # First pass: collect all unique speaker IDs
-        for movie_idx in range(len(all_movies['text'])):
-            speakers = all_movies['speaker_ids'][movie_idx]
-            for speaker in speakers:
-                if speaker not in self.speaker_to_id:
-                    self.speaker_to_id[speaker] = current_id
-                    self.id_to_speaker[current_id] = speaker
-                    current_id += 1
 
         for movie_idx in range(len(all_movies['text'])):
             lines = all_movies['text'][movie_idx]
@@ -34,40 +54,38 @@ class TokenizedMovieDataset(Dataset):
             for line, speaker in zip(lines, speakers):
                 full_text += line
                 full_speaker_ids.extend([speaker] * len(line))
-
-            # Tokenize with offset mapping
-            if not self.padding:
-                encoded = tokenizer(
-                    full_text,
-                    return_offsets_mapping=True,
-                    return_tensors=None,
-                    add_special_tokens=False  # optional, depending on use
-                )
-            else:
-                encoded = tokenizer(
+                
+            encoded = tokenizer(
                     full_text,
                     return_offsets_mapping=True,
                     return_tensors=None,
                     add_special_tokens=False,  # optional, depending on use
-                    max_length=self.max_length,
-                    padding='max_length',  # Add explicit padding parameter
-                    truncation=True  # Truncate if too long
+                    max_length=max_length,  # Truncate to max_length
+                    truncation=True
                 )
-
+                
             input_ids = encoded["input_ids"]
+            if len(input_ids) < self.min_length:
+                continue
             offsets = encoded["offset_mapping"]
 
             # Map each token to a speaker ID based on the token's starting char
             token_speaker_ids = []
+            # Keep track of speakers we've seen in this movie
+            speaker_order = {}
+            next_id = 0
+            
             for start, end in offsets:
                 if start < len(full_speaker_ids):
                     speaker = full_speaker_ids[start]
-                    # Convert string speaker ID to numerical ID
-                    speaker_id = self.speaker_to_id.get(speaker, self.speaker_to_id["UNKNOWN"])
-                    token_speaker_ids.append(speaker_id)
+                    # Assign sequential IDs as we encounter new speakers
+                    if speaker not in speaker_order:
+                        speaker_order[speaker] = next_id
+                        next_id += 1
+                    token_speaker_ids.append(speaker_order[speaker])
                 else:
                     # In case offset is beyond the text (shouldn't happen, but safe fallback)
-                    token_speaker_ids.append(self.speaker_to_id["UNKNOWN"])
+                    token_speaker_ids.append(0)
 
             # Convert input_ids and token_speaker_ids to tensors
             input_ids = torch.tensor(input_ids, dtype=torch.long)
@@ -77,9 +95,109 @@ class TokenizedMovieDataset(Dataset):
                 "input_ids": input_ids,
                 "token_speaker_ids": token_speaker_ids
             })
+            
+        # Create a mapping from global index to (movie_idx, position)
+        self.index_mapping = []
+        for movie_idx, movie_data in enumerate(self.data):
+            seq_length = len(movie_data["input_ids"])
+            # For each movie, create data points for all positions from min_length to seq_length-1
+            for position in range(self.min_length - 1, seq_length - 1):
+                self.index_mapping.append((movie_idx, position))
+                
+        print(f"Created {len(self.index_mapping)} total data points from {len(self.data)} movies")
 
     def __len__(self):
-        return len(self.data)
+        """
+        Return the total number of data points in the dataset.
+        
+        Returns:
+            int: The number of data points
+        """
+        return len(self.index_mapping)
 
-    def __getitem__(self, idx):
+    def getitem_old(self, idx):
+        """
+        Legacy method to get a movie by index.
+        
+        Args:
+            idx (int): Index of the movie
+            
+        Returns:
+            dict: Movie data containing input_ids and token_speaker_ids
+        """
         return self.data[idx]
+
+    def getitem_doc_with_position(self, doc_idx, position):
+        """
+        Get tokens up to a specific position in a document, along with the next token as label
+        and a speaker mask indicating which previous tokens share the same speaker as the label.
+        
+        Args:
+            doc_idx (int): Index of the document in the dataset
+            position (int): Number of tokens to include (0-based)
+            
+        Returns:
+            dict: Contains:
+                - input_ids: Tensor of tokens up to position, padded to max_length
+                - label: The next token after position
+                - speaker_mask: Binary mask indicating which previous tokens share speaker with label
+                - attention_mask: Binary mask indicating which tokens are actual content (1) vs padding (0)
+        """
+        doc = self.data[doc_idx]
+        input_ids = doc["input_ids"]
+        speaker_ids = doc["token_speaker_ids"]
+        
+        # Ensure position is valid
+        if position >= len(input_ids) - 1:
+            raise ValueError(f"Position {position} is too large for document of length {len(input_ids)}")
+            
+        # Get tokens up to position
+        context_tokens = input_ids[:position + 1]
+        context_speaker_ids = speaker_ids[:position + 1]
+        
+        # Create attention mask (1 for actual tokens, 0 for padding)
+        attention_mask = torch.ones(len(context_tokens), dtype=torch.long)
+        
+        # Pad or truncate to max_length (truncate from the left to keep the most recent context)
+        if len(context_tokens) > self.max_length:
+            context_tokens = context_tokens[-self.max_length:]
+            context_speaker_ids = context_speaker_ids[-self.max_length:]
+            attention_mask = attention_mask[-self.max_length:]
+        elif len(context_tokens) < self.max_length:
+            # Pad with zeros (assuming 0 is the padding token)
+            padding = torch.zeros(self.max_length - len(context_tokens), dtype=torch.long)
+            context_tokens = torch.cat([padding, context_tokens])
+            # Also pad speaker_ids
+            speaker_padding = torch.zeros(self.max_length - len(context_speaker_ids), dtype=torch.long)
+            context_speaker_ids = torch.cat([speaker_padding, context_speaker_ids])
+            # Pad attention mask with zeros
+            attention_padding = torch.zeros(self.max_length - len(attention_mask), dtype=torch.long)
+            attention_mask = torch.cat([attention_padding, attention_mask])
+        
+        # Get the next token as label
+        label = input_ids[position + 1]
+        # Get speaker ID of the label token
+        label_speaker = speaker_ids[position + 1]
+        # Create binary mask for same speaker
+        speaker_mask = (context_speaker_ids == label_speaker).float()
+        
+        return {
+            "input_ids": context_tokens,
+            "label": label,
+            "speaker_mask": speaker_mask,
+            "attention_mask": attention_mask
+        }
+        
+    def __getitem__(self, idx):
+        """
+        Main entry point for PyTorch DataLoader.
+        
+        Args:
+            idx (int): Global index in the dataset
+            
+        Returns:
+            dict: Data point containing input_ids, label, speaker_mask, and attention_mask
+        """
+        # Get the movie index and position from the mapping
+        movie_idx, position = self.index_mapping[idx]
+        return self.getitem_doc_with_position(movie_idx, position)
