@@ -114,6 +114,8 @@ def evaluate_gpt2_perplexity(model, tokenizer, dataset, batch_size=2):
             attention_mask = batch['attention_mask'].to(device)
             labels = batch['label'].to(device)
             
+            print("Input ids: ",input_ids.shape)
+            
             # Get model outputs
             outputs = model(input_ids, attention_mask=attention_mask)
             
@@ -161,16 +163,17 @@ def main():
     print("Loading models...")
     model, tokenizer = load_embedding_model_and_tokenizer(model_name)
     
-    # Load predictor (make sure to load state dict correctly)
-    print("Loading predictor...")
-    predictor = TokenPredictor(input_dim=1536, vocab_size=tokenizer.vocab_size).to('cuda')  # 1536 = 2 * 768 (GPT-2 hidden size).t
-    predictor.load_state_dict(torch.load(f"token_predictor_{model_name}_gd.pt"))
-    predictor.eval()
-    
     # Load evaluation dataset (last 1000 movies)
     print("Loading evaluation dataset...")
     all_movies = get_dictionary_of_movies(N_MOVIES_TO_USE=end_movie_id - start_movie_id, start_movie_id=start_movie_id)
-    dataset = TokenizedMovieDataset(all_movies, tokenizer, padding=True, max_length=512)
+    dataset = TokenizedMovieDataset(all_movies, tokenizer, padding=True, max_length=300, min_length=200)
+    del all_movies
+    '''
+    # Load predictor (make sure to load state dict correctly)
+    print("Loading predictor...")
+    predictor = TokenPredictor(input_dim=1536, vocab_size=tokenizer.vocab_size).to('cuda')  # 1536 = 2 * 768 (GPT-2 hidden size).t
+    predictor.load_state_dict(torch.load(f"../token_predictor_{model_name}_gd.pt"))
+    predictor.eval()
     
     ## Get hidden states and labels
     print("Getting hidden states and labels...")
@@ -183,6 +186,7 @@ def main():
     perplexity = evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels)
     
     print(f"Perplexity on held-out data, using token predictor (GD): {perplexity:.4f}")
+    '''
     
     # Evaluate perplexity using basic model
     print("Loading GPT-2 model for direct perplexity evaluation...")

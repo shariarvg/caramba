@@ -1,0 +1,224 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.4 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 4, in <module>
+    from transformers import AutoModel, AutoTokenizer, AutoModelForCausalLM
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1965, in __getattr__
+    value = getattr(module, name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/modeling_auto.py", line 22, in <module>
+    from .auto_factory import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 40, in <module>
+    from ...generation import GenerationMixin
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 30, in <module>
+    from transformers.generation.candidate_generator import AssistantVocabTranslatorCache
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/candidate_generator.py", line 27, in <module>
+    from sklearn.metrics import roc_curve
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+/home/users/sv226/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+2025-04-08 17:53:15.841069: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1744149195.859828  708092 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1744149195.865664  708092 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1744149195.881880  708092 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744149195.881906  708092 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744149195.881912  708092 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744149195.881917  708092 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-08 17:53:15.886575: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Loading models...
+Loading evaluation dataset...
+Created 500 total data points from 5 movies
+Loading GPT-2 model for direct perplexity evaluation...
+Computing logits and calculating perplexity...
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Input ids:  torch.Size([2, 300])
+Traceback (most recent call last):
+  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 206, in <module>
+    main()
+  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 201, in main
+    gpt2_perplexity = evaluate_gpt2_perplexity(gpt2_model, gpt2_tokenizer, dataset)
+  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 120, in evaluate_gpt2_perplexity
+    outputs = model(input_ids, attention_mask=attention_mask)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 1062, in forward
+    transformer_outputs = self.transformer(
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 922, in forward
+    outputs = block(
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 441, in forward
+    feed_forward_hidden_states = self.mlp(hidden_states)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 369, in forward
+    hidden_states = self.act(hidden_states)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/activations.py", line 56, in forward
+    return 0.5 * input * (1.0 + torch.tanh(math.sqrt(2.0 / math.pi) * (input + 0.044715 * torch.pow(input, 3.0))))
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 11.90 GiB of which 16.62 MiB is free. Including non-PyTorch memory, this process has 11.88 GiB memory in use. Of the allocated memory 11.41 GiB is allocated by PyTorch, and 189.42 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
