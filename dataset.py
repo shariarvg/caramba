@@ -220,6 +220,26 @@ class TokenizedMovieDataset(Dataset):
         movie_idx, position = self.index_mapping[idx]
         return self.getitem_doc_with_position(movie_idx, position)
 
+class TokenizedMovieDatasetForMaskedLM(TokenizedMovieDataset):
+    def __init__(self, all_movies, tokenizer, padding=False, max_length=512, min_length=100):
+        super().__init__(all_movies, tokenizer, padding, max_length, min_length)
+        
+    def __getitem__(self, idx):
+        item = super().__getitem__(idx)
+        #modify input_ids
+        input_ids = item["input_ids"]
+        input_ids = torch.cat([input_ids, torch.tensor([self.tokenizer.mask_token_id])])
+        #create new labels
+        label = input_ids.clone()
+        label[-1] = item['label']
+        label[:-1] = -100
+        # modify speaker mask
+        speaker_mask = item["speaker_mask"]
+        speaker_mask = torch.cat([speaker_mask, torch.tensor([1])])
+        return {"input_ids": input_ids, "label": label, "speaker_mask":  speaker_mask}
+    
+    
+
 
 class RandomSubsetDataset(Dataset):
     """
