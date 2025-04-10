@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoModel
 from torch.utils.data import DataLoader
-from dataset import TokenizedMovieDataset
+from dataset import TokenizedMovieDataset, RandomSubsetDataset
 from reshape_movies import get_dictionary_of_movies
 import numpy as np
 import os, sys
@@ -222,6 +222,8 @@ def main():
     print("Loading movie dataset...")
     all_movies = get_dictionary_of_movies(N_MOVIES_TO_USE=end_movie_id - start_movie_id, start_movie_id=start_movie_id)  # Start with 10 movies for testing
     dataset = TokenizedMovieDataset(all_movies, tokenizer, padding=True, max_length=300, min_length=200)
+    
+    dataset = RandomSubsetDataset(dataset, size=10000)
     
     # Obtain hidden states
     print("Obtaining hidden states...")

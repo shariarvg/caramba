@@ -1,0 +1,269 @@
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.4 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/inference.py", line 2, in <module>
+    from transformers import AutoModelForCausalLM, AutoTokenizer, AutoModel
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1965, in __getattr__
+    value = getattr(module, name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/modeling_auto.py", line 22, in <module>
+    from .auto_factory import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 40, in <module>
+    from ...generation import GenerationMixin
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 30, in <module>
+    from transformers.generation.candidate_generator import AssistantVocabTranslatorCache
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/candidate_generator.py", line 27, in <module>
+    from sklearn.metrics import roc_curve
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+/home/users/sv226/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+2025-04-08 18:48:48.964388: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1744152528.983240  708859 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1744152528.989107  708859 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1744152529.005452  708859 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152529.005479  708859 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152529.005486  708859 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152529.005491  708859 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-08 18:48:49.010176: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Loading movie dataset...
+Created 10000 total data points from 100 movies
+Obtaining hidden states...
+Saving hidden states...
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.4 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/train_predictor.py", line 5, in <module>
+    from sklearn.linear_model import LogisticRegression
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+/home/users/sv226/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+2025-04-08 18:51:21.616241: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1744152681.634925  708889 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1744152681.640723  708889 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1744152681.656953  708889 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152681.656978  708889 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152681.656984  708889 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152681.656989  708889 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-08 18:51:21.661511: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Loading hidden states...
+Loading labels...
+Training with gradient descent...
+Epoch [1/10], Loss: 11.6003, Accuracy: 3.10%
+Epoch [2/10], Loss: 5.4787, Accuracy: 6.80%
+Epoch [3/10], Loss: 4.3642, Accuracy: 9.20%
+Epoch [4/10], Loss: 3.7706, Accuracy: 14.00%
+Epoch [5/10], Loss: 3.4270, Accuracy: 19.50%
+Epoch [6/10], Loss: 3.2118, Accuracy: 23.20%
+Epoch [7/10], Loss: 3.0823, Accuracy: 24.00%
+Epoch [8/10], Loss: 2.9153, Accuracy: 26.90%
+Epoch [9/10], Loss: 2.7157, Accuracy: 30.60%
+Epoch [10/10], Loss: 2.6586, Accuracy: 31.80%
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.4 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/users/sv226/everything/caramba/evaluate_perplexity.py", line 4, in <module>
+    from transformers import AutoModel, AutoTokenizer, AutoModelForCausalLM
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1965, in __getattr__
+    value = getattr(module, name)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/modeling_auto.py", line 22, in <module>
+    from .auto_factory import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 40, in <module>
+    from ...generation import GenerationMixin
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1964, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1976, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 30, in <module>
+    from transformers.generation.candidate_generator import AssistantVocabTranslatorCache
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/transformers/generation/candidate_generator.py", line 27, in <module>
+    from sklearn.metrics import roc_curve
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/__init__.py", line 73, in <module>
+    from .base import clone  # noqa: E402
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils._estimator_html_repr import _HTMLDocumentationLinkMixin, estimator_html_repr
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/__init__.py", line 15, in <module>
+    from ._chunking import gen_batches, gen_even_slices
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_chunking.py", line 11, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_param_validation.py", line 17, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/validation.py", line 21, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/_array_api.py", line 17, in <module>
+    from .fixes import parse_version
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/sklearn/utils/fixes.py", line 20, in <module>
+    import pandas as pd
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/users/sv226/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/usr/lib/python3/dist-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+/home/users/sv226/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+2025-04-08 18:51:49.040555: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1744152709.060428  708925 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1744152709.066711  708925 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1744152709.084085  708925 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152709.084109  708925 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152709.084115  708925 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1744152709.084121  708925 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-08 18:51:49.088914: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/home/users/sv226/everything/caramba/evaluate_perplexity.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  predictor.load_state_dict(torch.load(f"../token_predictor_{model_name}_gd.pt"))
+Loading models...
+Loading evaluation dataset...
+Created 10000 total data points from 100 movies
+Loading predictor...
+Getting hidden states and labels...
+Evaluating perplexity...
+Computing logits and calculating perplexity...
+Perplexity on held-out data, using token predictor (GD): 1230225.3750
+Loading GPT-2 model for direct perplexity evaluation...
+Computing logits and calculating perplexity...
+Perplexity on held-out data, using basic model: 359.4609

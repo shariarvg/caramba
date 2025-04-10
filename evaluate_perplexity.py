@@ -39,6 +39,30 @@ def calculate_perplexity(logits, labels):
     
     return perplexity.item()
 
+def calculate_perplexity_numpy(probs, labels):
+    """
+    Calculate perplexity from probabilities and labels using NumPy.
+    
+    This function is used for sklearn models that return probabilities directly.
+    
+    Args:
+        probs (numpy.ndarray): Model output probabilities with shape (N, vocab_size)
+        labels (numpy.ndarray): Labels with shape (N,)
+        
+    Returns:
+        float: The calculated perplexity
+    """
+    # Get probability of the actual labels
+    label_probs = probs[np.arange(len(labels)), labels]
+    
+    # Calculate cross entropy loss
+    loss = -np.mean(np.log(label_probs + 1e-10))  # Add small epsilon to avoid log(0)
+    
+    # Perplexity is exp(loss)
+    perplexity = np.exp(loss)
+    
+    return perplexity
+
 def get_hidden_states_and_labels(model, tokenizer, dataset, batch_size=4):
     """
     Get hidden states and labels from the dataset.
@@ -72,6 +96,52 @@ def evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels, batc
     with torch.no_grad():
         logits = predictor(hidden_states)
         perplexity = calculate_perplexity(logits, labels)
+    
+    return perplexity
+
+def evaluate_lr_perplexity(lr_model, hidden_states, labels):
+    """
+    Evaluate perplexity on the dataset using a logistic regression model.
+    
+    This function:
+    1. Uses the logistic regression model to predict probabilities
+    2. Calculates perplexity from the probabilities and labels
+    
+    Args:
+        lr_model: The trained logistic regression model
+        hidden_states (torch.Tensor): Hidden states with shape (N, D)
+        labels (torch.Tensor): Labels with shape (N,)
+        
+    Returns:
+        float: The calculated perplexity
+    """
+    print("Computing probabilities and calculating perplexity...")
+    
+    # Convert to numpy for sklearn
+    hidden_states_np = hidden_states.cpu().numpy()
+    labels_np = labels.cpu().numpy()
+    
+    # Get the number of classes in the logistic regression model
+    n_classes = lr_model.classes_.shape[0]
+    print(f"Logistic regression model has {n_classes} classes")
+    
+    # Filter out labels that are outside the model's vocabulary range
+    valid_indices = labels_np < n_classes
+    if not np.all(valid_indices):
+        print(f"Warning: {np.sum(~valid_indices)} labels are outside the model's vocabulary range")
+        print(f"These labels will be excluded from perplexity calculation")
+        hidden_states_np = hidden_states_np[valid_indices]
+        labels_np = labels_np[valid_indices]
+        
+        if len(labels_np) == 0:
+            print("Error: No valid labels remain after filtering")
+            return float('inf')
+    
+    # Get probabilities from the model
+    probs = lr_model.predict_proba(hidden_states_np)
+    
+    # Calculate perplexity
+    perplexity = calculate_perplexity_numpy(probs, labels_np)
     
     return perplexity
 
@@ -187,18 +257,27 @@ def main():
     predictor.load_state_dict(torch.load(f"../token_predictor_{model_name}_gd.pt"))
     predictor.eval()
     
+    # Load logistic regression model
+    print("Loading logistic regression model...")
+    lr_model = np.load(f"../token_predictor_{model_name}_lr.npy", allow_pickle=True).item()
+    
     ## Get hidden states and labels
     print("Getting hidden states and labels...")
     hidden_states, labels = get_hidden_states_and_labels(model, tokenizer, dataset)
     hidden_states = hidden_states.to('cuda')
     labels = labels.to('cuda')
     
-    # Evaluate perplexity
+    # Evaluate perplexity of GD model
     print("Evaluating perplexity...")
     perplexity = evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels)
     
     print(f"Perplexity on held-out data, using token predictor (GD): {perplexity:.4f}")
     
+    # Evaluate perplexity of LR model
+    print("Evaluating perplexity of LR model...")
+    lr_perplexity = evaluate_lr_perplexity(lr_model, hidden_states, labels)
+    
+    print(f"Perplexity on held-out data, using token predictor (LR): {lr_perplexity:.4f}")
     
     # Evaluate perplexity using basic model
     print("Loading GPT-2 model for direct perplexity evaluation...")

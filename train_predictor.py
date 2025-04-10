@@ -66,7 +66,7 @@ def prepare_data(model_name):
     
     return hidden_states, labels
 
-def train_gradient_descent(hidden_states_pooled, labels, vocab_size, n_epochs=10, batch_size=16):
+def train_gradient_descent(hidden_states_pooled, labels, vocab_size, n_epochs=100, batch_size=16):
     """
     Train a neural network using gradient descent.
     
@@ -189,8 +189,8 @@ def main():
     lr_model = train_logistic_regression(hidden_states, labels, vocab_size)
     
     # Save models
-    torch.save(gd_model.state_dict(), f'token_predictor_{model_name}_gd.pt')
-    np.save(f'token_predictor_{model_name}_lr.npy', lr_model)
+    torch.save(gd_model.state_dict(), f'../token_predictor_{model_name}_gd.pt')
+    np.save(f'../token_predictor_{model_name}_lr.npy', lr_model)
 
 if __name__ == "__main__":
     main()
