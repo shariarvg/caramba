@@ -199,6 +199,67 @@ def predict_next_tokens_hybrid_attention(model, tokenizer, dataset, batch_size=4
     
     return total_loss / len(dataset) * batch_size, runtime
 
+def predict_next_tokens_random_hybrid_attention(model, tokenizer, dataset, random_hybrid_ratio=0.8, batch_size=4):
+    """
+    Predict next tokens using Longformer with random hybrid attention:
+    - Local attention to the last local_window tokens
+    - Global attention to a random subset of tokens (0.8 probability)
+    
+    """
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    
+    # Move model to GPU if available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
+    
+    total_loss = 0
+    total_tokens = 0
+    start_time = time.time()
+    
+    # Process each batch
+    
+    for batch in tqdm(dataloader, desc="Hybrid Attention"):
+        # Move inputs to device
+        input_ids = batch["input_ids"].to(device)
+        labels = batch["label"].to(device)
+        speaker_mask = batch["speaker_mask"].to(device)
+        
+        # Ensure input_ids has shape [batch_size, seq_length]
+        if input_ids.dim() == 1:
+            input_ids = input_ids.unsqueeze(0)  # Add batch dimension
+        
+        # Ensure labels has shape [batch_size]
+        if labels.dim() == 0:
+            labels = labels.unsqueeze(0)  # Add batch dimension
+        
+        attention_mask = (input_ids != tokenizer.pad_token_id).long()
+
+        # Create global attention mask
+        # 1 for tokens with global attention, 0 for tokens with local attention
+        global_attention_mask = (torch.rand(input_ids.shape, device=input_ids.device) < random_hybrid_ratio).int()
+        global_attention_mask[:,-1]=1 
+        
+        # Forward pass
+        with torch.no_grad():
+            outputs = model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                global_attention_mask=global_attention_mask,
+                labels=labels
+            )
+        
+        # Get loss
+        loss = outputs.loss.item()
+        total_loss += loss #* input_ids.size(0)
+        #total_tokens += input_ids.size(0)
+    
+    # Calculate runtime
+    runtime = time.time() - start_time
+    
+    # Calculate average loss
+    #avg_loss = total_loss / total_tokens
+    
+    return total_loss / len(dataset) * batch_size, runtime
 def obtain_predictions(model, tokenizer, dataset, max_length=300, local_window=100, batch_size=1):
     """
     Obtain predictions using both full attention and hybrid attention.
@@ -225,7 +286,12 @@ def obtain_predictions(model, tokenizer, dataset, max_length=300, local_window=1
         model, tokenizer, dataset, batch_size
     )
     
-    return (full_loss, full_runtime), (hybrid_loss, hybrid_runtime)
+    # Process with random hybrid attention
+    random_hybrid_loss, random_hybrid_runtime = predict_next_tokens_random_hybrid_attention(
+        model, tokenizer, dataset, batch_size
+    )
+    
+    return (full_loss, full_runtime), (hybrid_loss, hybrid_runtime), (random_hybrid_loss, random_hybrid_runtime)
 
 def main():
     parser = argparse.ArgumentParser(description="Compare Longformer attention strategies")
@@ -250,7 +316,7 @@ def main():
     dataset = RandomSubsetDataset(dataset, size=1000)
     # Process each movie
     
-    (full_loss, full_runtime), (hybrid_loss, hybrid_runtime) = obtain_predictions(
+    (full_loss, full_runtime), (hybrid_loss, hybrid_runtime), (random_hybrid_loss, random_hybrid_runtime) = obtain_predictions(
         model, tokenizer, dataset, args.max_length, args.local_window, args.batch_size
     )
     
@@ -260,19 +326,22 @@ def main():
     print(f"Hybrid Attention - Average Loss: {hybrid_loss:.4f}, Average Runtime: {hybrid_runtime:.4f}s")
     print(f"Runtime Improvement: {(full_runtime - hybrid_runtime) / full_runtime * 100:.2f}%")
     print(f"Loss Difference: {hybrid_loss - full_loss:.4f}")
+    print(f"Random Hybrid Attention - Average Loss: {random_hybrid_loss:.4f}, Average Runtime: {random_hybrid_runtime:.4f}s")
+    print(f"Runtime Improvement: {(full_runtime - random_hybrid_runtime) / full_runtime * 100:.2f}%")
+    print(f"Loss Difference: {random_hybrid_loss - full_loss:.4f}")
     
     # Plot results
     plt.figure(figsize=(12, 5))
     
     # Plot losses
     plt.subplot(1, 2, 1)
-    plt.bar(["Full Attention", "Hybrid Attention"], [full_loss, hybrid_loss])
+    plt.bar(["Full Attention", "Hybrid Attention", "Random Hybrid Attention"], [full_loss, hybrid_loss, random_hybrid_loss])
     plt.title("Average Cross-Entropy Loss")
     plt.ylabel("Loss")
     
     # Plot runtimes
     plt.subplot(1, 2, 2)
-    plt.bar(["Full Attention", "Hybrid Attention"], [full_runtime, hybrid_runtime])
+    plt.bar(["Full Attention", "Hybrid Attention", "Random Hybrid Attention"], [full_runtime, hybrid_runtime, random_hybrid_runtime])
     plt.title("Average Runtime")
     plt.ylabel("Seconds")
     
