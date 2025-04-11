@@ -53,6 +53,86 @@ The base `TokenizedMovieDataset` class processes movie dialogue data and prepare
 | Speaker Mask | Original sequence | Extended for mask token |
 | Use Case | Next token prediction | Masked language modeling |
 
+## Example: Evaluating an Autoregressive Transformer
+
+Here's an example of how to use `TokenizedMovieDataset` to evaluate an off-the-shelf autoregressive transformer model (like GPT-2) on movie dialogue:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from dataset import TokenizedMovieDataset
+from reshape_movies import get_dictionary_of_movies
+import torch
+
+# Load model and tokenizer
+model_name = "gpt2"  # or any other autoregressive model
+model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+# Load movie data
+all_movies = get_dictionary_of_movies(
+    N_MOVIES_TO_USE=10,  # Number of movies to process
+    start_movie_id=0     # Starting movie ID
+)
+
+# Create dataset
+dataset = TokenizedMovieDataset(
+    all_movies=all_movies,
+    tokenizer=tokenizer,
+    padding=True,        # Pad sequences to max_length
+    max_length=512,      # Maximum sequence length
+    min_length=100       # Minimum sequence length
+)
+
+# Create dataloader
+dataloader = torch.utils.data.DataLoader(
+    dataset,
+    batch_size=4,        # Adjust based on GPU memory
+    shuffle=False
+)
+
+# Move model to GPU if available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = model.to(device)
+
+# Evaluate model
+total_loss = 0
+total_tokens = 0
+
+for batch in dataloader:
+    # Move inputs to device
+    input_ids = batch["input_ids"].to(device)
+    labels = batch["label"].to(device)
+    attention_mask = batch["attention_mask"].to(device)
+    
+    # Forward pass
+    with torch.no_grad():
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=labels
+        )
+    
+    # Accumulate loss
+    total_loss += outputs.loss.item() * input_ids.size(0)
+    total_tokens += input_ids.size(0)
+
+# Calculate average loss
+avg_loss = total_loss / total_tokens
+print(f"Average loss: {avg_loss:.4f}")
+```
+
+This example:
+1. Loads a pre-trained autoregressive model and its tokenizer
+2. Creates a `TokenizedMovieDataset` from movie dialogue data
+3. Sets up a dataloader for batch processing
+4. Evaluates the model on the dataset, calculating the average loss
+
+The dataset automatically handles:
+- Tokenization of movie dialogue
+- Creation of input sequences and labels
+- Speaker tracking and masking
+- Sequence padding and truncation
+
 ## Requirements
 
 - Python 3.6+
