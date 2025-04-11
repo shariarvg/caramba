@@ -68,8 +68,8 @@ def get_hidden_states_and_labels(model, tokenizer, dataset, batch_size=4):
     Get hidden states and labels from the dataset.
     """
     hidden_states, labels = obtain_double_hidden_states_and_labels(model, tokenizer, dataset, batch_size=batch_size)
-    hidden_states = torch.tensor(hidden_states, dtype=torch.float32)
-    labels = torch.tensor(labels, dtype=torch.long)
+    hidden_states = torch.tensor(hidden_states, dtype=torch.float16)
+    labels = torch.tensor(labels, dtype=torch.float16)
     return hidden_states, labels
 
 def evaluate_perplexity(model, tokenizer, predictor, hidden_states, labels, batch_size=4):

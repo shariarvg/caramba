@@ -89,8 +89,8 @@ class TokenizedMovieDataset(Dataset):
                     token_speaker_ids.append(0)
 
             # Convert input_ids and token_speaker_ids to tensors
-            input_ids = torch.tensor(input_ids, dtype=torch.long)
-            token_speaker_ids = torch.tensor(token_speaker_ids, dtype=torch.long)
+            input_ids = torch.tensor(input_ids, dtype=torch.float16)
+            token_speaker_ids = torch.tensor(token_speaker_ids, dtype=torch.float16)
             
             self.data.append({
                 "input_ids": input_ids,
@@ -157,7 +157,7 @@ class TokenizedMovieDataset(Dataset):
         context_speaker_ids = speaker_ids[:position + 1]
         
         # Create attention mask (1 for actual tokens, 0 for padding)
-        attention_mask = torch.ones(len(context_tokens), dtype=torch.long)
+        attention_mask = torch.ones(len(context_tokens), dtype=torch.float16)
         
         # Pad or truncate to max_length (truncate from the left to keep the most recent context)
         if len(context_tokens) > self.max_length:
@@ -166,13 +166,13 @@ class TokenizedMovieDataset(Dataset):
             attention_mask = attention_mask[-self.max_length:]
         elif len(context_tokens) < self.max_length:
             # Pad with zeros (assuming 0 is the padding token)
-            padding = torch.zeros(self.max_length - len(context_tokens), dtype=torch.long)
+            padding = torch.zeros(self.max_length - len(context_tokens), dtype=torch.float16)
             context_tokens = torch.cat([padding, context_tokens])
             # Also pad speaker_ids
-            speaker_padding = torch.zeros(self.max_length - len(context_speaker_ids), dtype=torch.long)
+            speaker_padding = torch.zeros(self.max_length - len(context_speaker_ids), dtype=torch.float16)
             context_speaker_ids = torch.cat([speaker_padding, context_speaker_ids])
             # Pad attention mask with zeros
-            attention_padding = torch.zeros(self.max_length - len(attention_mask), dtype=torch.long)
+            attention_padding = torch.zeros(self.max_length - len(attention_mask), dtype=torch.float16)
             attention_mask = torch.cat([attention_padding, attention_mask])
         
         # Get the next token as label

@@ -89,8 +89,8 @@ def train_gradient_descent(hidden_states_pooled, labels, vocab_size, n_epochs=10
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Convert numpy arrays to PyTorch tensors
-    hidden_states_tensor = torch.tensor(hidden_states_pooled, dtype=torch.float32)
-    labels_tensor = torch.tensor(labels, dtype=torch.long)
+    hidden_states_tensor = torch.tensor(hidden_states_pooled, dtype=torch.float16)
+    labels_tensor = torch.tensor(labels, dtype=torch.foat16)
     
     model = TokenPredictor(hidden_states_tensor.shape[-1], vocab_size).to(device)
     
