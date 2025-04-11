@@ -18,6 +18,41 @@ This project focuses on:
 - `evaluate_perplexity.py`: Functions for evaluating perplexity on movie dialogue datasets
 - `reshape_movies.py`: Utilities for processing movie dialogue data
 
+## Dataset Classes
+
+### TokenizedMovieDataset
+
+The base `TokenizedMovieDataset` class processes movie dialogue data and prepares it for token prediction tasks. It:
+
+1. Tokenizes movie dialogue text using a specified tokenizer
+2. Maps speaker IDs to sequential integers
+3. Creates data points for each position in the dialogue
+4. Returns:
+   - `input_ids`: Tokens up to the current position
+   - `label`: The next token to predict
+   - `speaker_mask`: Binary mask indicating which previous tokens share the same speaker
+   - `attention_mask`: Binary mask indicating actual tokens vs padding
+
+### TokenizedMovieDatasetForMaskedLM
+
+`TokenizedMovieDatasetForMaskedLM` extends `TokenizedMovieDataset` to support masked language modeling. Key differences:
+
+1. Adds a mask token at the end of each sequence
+2. Modifies the label format:
+   - Original: Single token ID to predict
+   - MaskedLM: Full sequence with mask token and -100 for non-masked positions
+3. Adjusts speaker masks to include the mask token position
+4. Designed specifically for models like Longformer that use masked language modeling
+
+### Key Differences
+
+| Feature | TokenizedMovieDataset | TokenizedMovieDatasetForMaskedLM |
+|---------|----------------------|----------------------------------|
+| Output Format | Single token prediction | Masked language modeling |
+| Label Shape | Scalar (next token) | Sequence with mask token |
+| Speaker Mask | Original sequence | Extended for mask token |
+| Use Case | Next token prediction | Masked language modeling |
+
 ## Requirements
 
 - Python 3.6+
